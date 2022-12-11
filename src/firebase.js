@@ -11,7 +11,6 @@ const firebaseConfig = {
 };
 
 const firebase = initializeApp(firebaseConfig);
-export default firebase;
 
 // firebase인증 초기화하고 인증 서비스 가져와서 내보냄
 export const authService = getAuth(firebase);
