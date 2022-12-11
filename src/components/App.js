@@ -1,7 +1,8 @@
-import firebase from "./firebase";
+import firebase from "../firebase";
+import AppRouter from "./Router";
 
 function App() {
-  return <div>App</div>;
+  return <AppRouter />;
 }
 
 export default App;
