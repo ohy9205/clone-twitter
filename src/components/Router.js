@@ -3,9 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "../routes/Auth";
 import Home from "../routes/Home";
 
-function AppRouter() {
-  const [isLoggedIn, setIsLoggedIn] = useState();
-
+function AppRouter({ isLoggedIn }) {
   const showHome = <Route path="/" exact element={<Home />} />;
   const loginPage = <Route path="/" exact element={<Auth />} />;
 
