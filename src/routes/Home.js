@@ -67,7 +67,11 @@ function Home({ userInfo }) {
       </form>
       <div>
         {nweets.map((nweet) => (
-          <Nweet key={nweet.id} nweetObj={nweet} />
+          <Nweet
+            key={nweet.id}
+            nweetObj={nweet}
+            isOwner={nweet.authorId === userInfo.uid}
+          />
         ))}
       </div>
     </div>
