@@ -9,6 +9,7 @@ function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState("");
 
   const onChangeHandler = (e) => {
     const {
@@ -43,7 +44,7 @@ function Auth() {
         );
       }
     } catch (error) {
-      console.log(error);
+      setError(error.message);
     }
   };
 
@@ -69,6 +70,7 @@ function Auth() {
         <button type="submit">
           {newAccount ? "Create Accoount" : "Log In"}
         </button>
+        <p>{error}</p>
       </form>
       <div>
         <button>continue with Google</button>
