@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -10,7 +11,11 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
+// firebase 초기화
 const firebase = initializeApp(firebaseConfig);
 
-// firebase인증 초기화하고 인증 서비스 가져와서 내보냄
+// firebase인증 초기화하고 내보냄
 export const authService = getAuth(firebase);
+
+// firebase clound store 초기화
+export const dbService = getFirestore(firebase);
