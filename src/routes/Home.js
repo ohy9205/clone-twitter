@@ -7,6 +7,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { dbService } from "../firebase";
+import Nweet from "../components/Nweet";
 
 function Home({ userInfo }) {
   const [nweet, setNweet] = useState("");
@@ -66,9 +67,7 @@ function Home({ userInfo }) {
       </form>
       <div>
         {nweets.map((nweet) => (
-          <div key={nweet.id}>
-            <h4>{nweet.text}</h4>
-          </div>
+          <Nweet key={nweet.id} nweetObj={nweet} />
         ))}
       </div>
     </div>
