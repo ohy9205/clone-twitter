@@ -7,11 +7,7 @@ function Nweet({ nweetObj, isOwner }) {
   const onDeleteHandler = async () => {
     const ok = window.confirm("삭제하시겠습니까?");
     if (ok) {
-      // delete 글
       await deleteDoc(doc(dbService, "nweets", nweetObj.id));
-    } else {
-      // delete 취소
-      return;
     }
   };
 
