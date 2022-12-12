@@ -1,25 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
 import { dbService } from "../firebase";
 
 function Home({ userInfo }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 
-  //db로부터 nweets를 불러오는 메소드
-  const getNweets = async () => {
-    const querySnapshot = await getDocs(collection(dbService, "nweets"));
-    querySnapshot.forEach((doc) => {
-      const nweetObj = { id: doc.id, ...doc.data() };
-      setNweets((prev) => [nweetObj, ...prev]);
-    });
-    console.log(nweets);
-  };
-
-  //컴포넌트가 마운트되면 db에 저장된 nweets들을 불러온다
-  useEffect(() => {
-    getNweets();
-  }, []);
+  console.log(nweets);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -39,6 +26,20 @@ function Home({ userInfo }) {
     setNweet(value);
   };
 
+  //컴포넌트가 마운트되면 db에 저장된 nweets들을 불러온다
+  useEffect(() => {
+    //기존에 getDocs로 구현한건 새로고침을 해야 다시 DB에 있는 정보를 가져와서 업데이트하는 방식
+    //하지만 FireStore Database는 Realtime Database이기 때문에
+    //해당 이점을 살리기 위해 리얼 타임을 구현
+    onSnapshot(query(collection(dbService, "nweets")), (querySnapshot) => {
+      const newArray = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNweets(newArray);
+    });
+  }, []);
+
   return (
     <div>
       <form onSubmit={onSubmitHandler}>
@@ -54,7 +55,7 @@ function Home({ userInfo }) {
       <div>
         {nweets.map((nweet) => (
           <div key={nweet.id}>
-            <h4>{nweet.nweet}</h4>
+            <h4>{nweet.text}</h4>
           </div>
         ))}
       </div>
