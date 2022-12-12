@@ -10,6 +10,9 @@ function App() {
   // 초기화 상태를 저장하는 state. 이 상태로 UI를 구분함
   const [init, setInit] = useState(false);
 
+  // 로그인한 사용자 정보
+  const [userInfo, setUserInfo] = useState({});
+
   // isLoggedIn = useState(authService.currentUser) 코드만 있으면
   //로그인 된 상태일때 firebase에서 유저를 찾아오는 시간을 기다리지 못해 언제나 null값이 들어가기때문에
   //onAuthStateChanged로 db로부터 user정보를 가져왔을때만 isLoggedIn상태가 변화되게 한다
@@ -19,6 +22,7 @@ function App() {
     onAuthStateChanged(authService, (user) => {
       if (user) {
         setIsLoggedIn(true);
+        setUserInfo(user);
       } else {
         setIsLoggedIn(false);
       }
@@ -28,7 +32,11 @@ function App() {
 
   return (
     <div>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing"}
+      {init ? (
+        <AppRouter isLoggedIn={isLoggedIn} userInfo={userInfo} />
+      ) : (
+        "Initializing"
+      )}
       <footer>&copy; {new Date().getFullYear()} nwitter</footer>
     </div>
   );

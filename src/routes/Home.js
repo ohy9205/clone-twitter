@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { dbService } from "../firebase";
 
-function Home() {
+function Home({ userInfo }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 
@@ -25,8 +25,9 @@ function Home() {
     e.preventDefault();
 
     const docRef = await addDoc(collection(dbService, "nweets"), {
-      nweet,
+      text: nweet,
       createdAt: Date.now(),
+      authorId: userInfo.uid,
     });
     setNweet("");
   };

@@ -5,8 +5,10 @@ import Home from "../routes/Home";
 import Profile from "../routes/Profile";
 import Navigation from "./Navigation";
 
-function AppRouter({ isLoggedIn }) {
-  const showHome = <Route path="/" exact element={<Home />} />;
+function AppRouter({ isLoggedIn, userInfo }) {
+  const showHome = (
+    <Route path="/" exact element={<Home userInfo={userInfo} />} />
+  );
   const loginPage = <Route path="/" exact element={<Auth />} />;
 
   return (
