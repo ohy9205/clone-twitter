@@ -1,8 +1,14 @@
 import React, { useState } from "react";
+import { authService } from "../firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [newAccount, setNewAccount] = useState(true);
 
   const onChangeHandler = (e) => {
     const {
@@ -16,8 +22,29 @@ function Auth() {
     }
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      if (newAccount) {
+        //create account - API가 promise를 반환하므로 await필요
+        const data = await createUserWithEmailAndPassword(
+          authService,
+          email,
+          password
+        );
+        console.log(data);
+      } else {
+        //login
+        const data = await signInWithEmailAndPassword(
+          authService,
+          email,
+          password
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -39,7 +66,9 @@ function Auth() {
           placeholder="Password"
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">
+          {newAccount ? "Create Accoount" : "Log In"}
+        </button>
       </form>
       <div>
         <button>continue with Google</button>
