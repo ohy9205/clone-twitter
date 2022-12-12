@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { authService } from "../firebase";
 import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -52,6 +55,23 @@ function Auth() {
     setNewAccount((prev) => !prev);
   };
 
+  const onSocialClick = async (e) => {
+    const {
+      target: { name },
+    } = e;
+
+    // 소셜 로그인을 위한 provider를 담을 변수
+    let provider;
+
+    if (name === "Google") {
+      provider = new GoogleAuthProvider();
+    } else if (name === "GitHub") {
+      provider = new GithubAuthProvider();
+    }
+    const data = await signInWithPopup(authService, provider);
+    console.log(data);
+  };
+
   return (
     <div>
       <form onSubmit={onSubmitHandler}>
@@ -80,8 +100,12 @@ function Auth() {
         {newAccount ? "Sign in" : "Create Account"}
       </span>
       <div>
-        <button>continue with Google</button>
-        <button>continue with GitHub</button>
+        <button name="Google" onClick={onSocialClick}>
+          continue with Google
+        </button>
+        <button name="GitHub" onClick={onSocialClick}>
+          continue with GitHub
+        </button>
       </div>
     </div>
   );
