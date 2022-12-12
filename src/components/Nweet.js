@@ -1,8 +1,11 @@
-import React from "react";
-import { doc, deleteDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "../firebase";
 
 function Nweet({ nweetObj, isOwner }) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [newNweet, setNewNweet] = useState(nweetObj.text);
+
   //글 삭제
   const onDeleteHandler = async () => {
     const ok = window.confirm("삭제하시겠습니까?");
@@ -11,16 +14,54 @@ function Nweet({ nweetObj, isOwner }) {
     }
   };
 
-  return (
+  // 수정모드 토글
+  const toggleEditing = () => {
+    setIsEditing((prev) => !prev);
+    setNewNweet(nweetObj.text);
+  };
+
+  // 수정중인 글 내용 state
+  const onChangeHandler = (e) => {
+    setNewNweet(e.target.value);
+  };
+
+  // 폼 제출 이벤트 핸들러
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    updateDoc(doc(dbService, "nweets", nweetObj.id), {
+      text: newNweet,
+    });
+    setIsEditing(false);
+  };
+
+  // 수정모드일경우 보여질 화면
+  const showEditing = (
     <div>
-      <h4>{nweetObj.text}</h4>
-      {isOwner && (
-        <>
-          <button onClick={onDeleteHandler}>Delete Nweet</button>
-          <button>Edit Nweet</button>
-        </>
-      )}
+      <form onSubmit={onSubmitHandler}>
+        <input
+          type="text"
+          value={newNweet}
+          placeholder="Edit your nweet"
+          onChange={onChangeHandler}
+          required
+        />
+        <button>Save</button>
+      </form>
+      <button onClick={toggleEditing}>Cancle</button>
     </div>
+  );
+
+  return (
+    <>
+      {isEditing ? showEditing : <p>{nweetObj.text}</p>}
+
+      {isOwner && (
+        <div>
+          <button onClick={onDeleteHandler}>Delete Nweet</button>
+          <button onClick={toggleEditing}>Edit Nweet</button>
+        </div>
+      )}
+    </>
   );
 }
 
