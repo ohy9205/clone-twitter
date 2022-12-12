@@ -48,6 +48,10 @@ function Auth() {
     }
   };
 
+  const toggleAccount = () => {
+    setNewAccount((prev) => !prev);
+  };
+
   return (
     <div>
       <form onSubmit={onSubmitHandler}>
@@ -68,10 +72,13 @@ function Auth() {
           required
         />
         <button type="submit">
-          {newAccount ? "Create Accoount" : "Log In"}
+          {newAccount ? "Create Accoount" : "Sign In"}
         </button>
         <p>{error}</p>
       </form>
+      <span onClick={toggleAccount}>
+        {newAccount ? "Sign in" : "Create Account"}
+      </span>
       <div>
         <button>continue with Google</button>
         <button>continue with GitHub</button>
