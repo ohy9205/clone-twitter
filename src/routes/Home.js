@@ -54,7 +54,7 @@ function Home({ userInfo }) {
   }, []);
 
   return (
-    <div>
+    <section>
       <form onSubmit={onSubmitHandler}>
         <input
           type="text"
@@ -74,7 +74,7 @@ function Home({ userInfo }) {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

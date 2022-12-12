@@ -12,7 +12,7 @@ function AppRouter({ isLoggedIn, userInfo }) {
   const loginPage = <Route path="/" exact element={<Auth />} />;
 
   return (
-    <div>
+    <>
       <BrowserRouter>
         {isLoggedIn && <Navigation />}
         <Routes>
@@ -20,7 +20,7 @@ function AppRouter({ isLoggedIn, userInfo }) {
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 
