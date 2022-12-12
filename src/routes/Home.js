@@ -15,8 +15,6 @@ function Home({ userInfo }) {
 
   const nweetsCollection = collection(dbService, "nweets");
 
-  console.log(nweets);
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
