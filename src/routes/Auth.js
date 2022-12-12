@@ -37,7 +37,6 @@ function Auth() {
           email,
           password
         );
-        console.log(data);
       } else {
         //login
         const data = await signInWithEmailAndPassword(
@@ -69,7 +68,6 @@ function Auth() {
       provider = new GithubAuthProvider();
     }
     const data = await signInWithPopup(authService, provider);
-    console.log(data);
   };
 
   return (
