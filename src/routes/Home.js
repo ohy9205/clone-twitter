@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { collection, addDoc, onSnapshot, query } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import { dbService } from "../firebase";
 
 function Home({ userInfo }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 
+  const nweetsCollection = collection(dbService, "nweets");
+
   console.log(nweets);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const docRef = await addDoc(collection(dbService, "nweets"), {
+    await addDoc(nweetsCollection, {
       text: nweet,
       createdAt: Date.now(),
       authorId: userInfo.uid,
@@ -31,7 +39,11 @@ function Home({ userInfo }) {
     //기존에 getDocs로 구현한건 새로고침을 해야 다시 DB에 있는 정보를 가져와서 업데이트하는 방식
     //하지만 FireStore Database는 Realtime Database이기 때문에
     //해당 이점을 살리기 위해 리얼 타임을 구현
-    onSnapshot(query(collection(dbService, "nweets")), (querySnapshot) => {
+
+    // nweets를 최신순으로 정렬하는 쿼리
+    const orderQuery = query(nweetsCollection, orderBy("createdAt", "desc"));
+    // 리얼타임 db 구독
+    onSnapshot(orderQuery, (querySnapshot) => {
       const newArray = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
