@@ -9,7 +9,8 @@ import {
 } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 import { authService, dbService } from "../firebase";
-function Profile({ userInfo }) {
+
+function Profile({ userInfo, refreshUser }) {
   const navigate = useNavigate();
   const [newDisplayName, setNewDisplayName] = useState(userInfo.displayName);
 
@@ -27,6 +28,7 @@ function Profile({ userInfo }) {
     await updateProfile(authService.currentUser, {
       displayName: newDisplayName,
     });
+    refreshUser();
   };
 
   // 로그아웃 처리

@@ -5,7 +5,7 @@ import Home from "../routes/Home";
 import Profile from "../routes/Profile";
 import Navigation from "./Navigation";
 
-function AppRouter({ isLoggedIn, userInfo }) {
+function AppRouter({ isLoggedIn, userInfo, refreshUser }) {
   const showHome = (
     <Route path="/" exact element={<Home userInfo={userInfo} />} />
   );
@@ -17,7 +17,10 @@ function AppRouter({ isLoggedIn, userInfo }) {
         {isLoggedIn && <Navigation userInfo={userInfo} />}
         <Routes>
           {isLoggedIn ? showHome : loginPage}
-          <Route path="/profile" element={<Profile userInfo={userInfo} />} />
+          <Route
+            path="/profile"
+            element={<Profile userInfo={userInfo} refreshUser={refreshUser} />}
+          />
         </Routes>
       </BrowserRouter>
     </>

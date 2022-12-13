@@ -23,6 +23,10 @@ function App() {
       if (user) {
         setIsLoggedIn(true);
         setUserInfo(user);
+        // setUserInfo({
+        //   displayName: user.displayName,
+        //   uid: user.uid,
+        // });
       } else {
         setIsLoggedIn(false);
       }
@@ -30,10 +34,26 @@ function App() {
     });
   }, []);
 
+  // 유저 정보를 새로고침한다
+  const refreshUser = () => {
+    console.log(authService.currentUser);
+    const user = authService.currentUser;
+    // 필요한 데이터만 userInfo에 저장한다
+    setUserInfo({
+      displayName: user.displayName,
+      uid: user.uid,
+    });
+    // setUserInfo(Object.assign({}, user));
+  };
+
   return (
     <div>
       {init ? (
-        <AppRouter isLoggedIn={isLoggedIn} userInfo={userInfo} />
+        <AppRouter
+          isLoggedIn={isLoggedIn}
+          userInfo={userInfo}
+          refreshUser={refreshUser}
+        />
       ) : (
         "Initializing"
       )}
