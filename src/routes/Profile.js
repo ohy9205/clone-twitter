@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   collection,
@@ -7,10 +7,27 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
 import { authService, dbService } from "../firebase";
-
 function Profile({ userInfo }) {
   const navigate = useNavigate();
+  const [newDisplayName, setNewDisplayName] = useState(userInfo.displayName);
+
+  const onChangeDisplayNameHandler = (e) => {
+    const {
+      target: { value },
+    } = e;
+    setNewDisplayName(value);
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    if (userInfo.displayName === newDisplayName) return;
+    // console.log(userInfo.updateProfile);
+    await updateProfile(authService.currentUser, {
+      displayName: newDisplayName,
+    });
+  };
 
   // 로그아웃 처리
   const onLogoutHandler = () => {
@@ -41,6 +58,19 @@ function Profile({ userInfo }) {
 
   return (
     <div>
+      <div>
+        <form onSubmit={onSubmitHandler}>
+          <input
+            type="text"
+            placeholder="Display name"
+            value={newDisplayName}
+            onChange={onChangeDisplayNameHandler}
+          />
+          <button type="submit" onClick={onSubmitHandler}>
+            Update Profile
+          </button>
+        </form>
+      </div>
       <button onClick={onLogoutHandler}>Logout</button>
     </div>
   );
