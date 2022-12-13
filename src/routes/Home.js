@@ -6,7 +6,9 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { dbService } from "../firebase";
+import { ref, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { dbService, storageService } from "../firebase";
 import Nweet from "../components/Nweet";
 
 function Home({ userInfo }) {
@@ -20,12 +22,19 @@ function Home({ userInfo }) {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    await addDoc(nweetsCollection, {
-      text: nweet,
-      createdAt: Date.now(),
-      authorId: userInfo.uid,
-    });
-    setNweet("");
+    // 파일에 접근하는 레퍼런스 생성
+    // 업로드 유저를 구분하기 위해 userInfo.uid 이름의 폴더를 생성한다
+    const storageRef = ref(storageService, `${userInfo.uid}/${uuidv4()}`);
+    // 파일 업로드
+    const response = await uploadString(storageRef, attachment, "data_url");
+    console.log(response);
+
+    // await addDoc(nweetsCollection, {
+    //   text: nweet,
+    //   createdAt: Date.now(),
+    //   authorId: userInfo.uid,
+    // });
+    // setNweet("");
   };
 
   const onChangeHandler = (e) => {

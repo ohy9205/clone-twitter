@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -19,3 +20,6 @@ export const authService = getAuth(firebase);
 
 // firebase clound store 초기화
 export const dbService = getFirestore(firebase);
+
+// storage 초기화
+export const storageService = getStorage(firebase);
