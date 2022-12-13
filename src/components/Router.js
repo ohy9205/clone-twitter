@@ -14,7 +14,7 @@ function AppRouter({ isLoggedIn, userInfo }) {
   return (
     <>
       <BrowserRouter>
-        {isLoggedIn && <Navigation />}
+        {isLoggedIn && <Navigation userInfo={userInfo} />}
         <Routes>
           {isLoggedIn ? showHome : loginPage}
           <Route path="/profile" element={<Profile userInfo={userInfo} />} />
