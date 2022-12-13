@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   collection,
   addDoc,
@@ -12,6 +12,8 @@ import Nweet from "../components/Nweet";
 function Home({ userInfo }) {
   const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
+  const [attachment, setAttachment] = useState();
+  const fileInput = useRef();
 
   const nweetsCollection = collection(dbService, "nweets");
 
@@ -45,8 +47,11 @@ function Home({ userInfo }) {
     // 파일 정보를 읽는다
     const reader = new FileReader();
     // 파일이 읽기가 끝났을 때 실행
-    reader.onloadend = (finishedEvent) => {
-      console.log(finishedEvent);
+    reader.onload = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setAttachment(result);
     };
     reader.readAsDataURL(theFile);
   };
@@ -69,6 +74,11 @@ function Home({ userInfo }) {
     });
   }, []);
 
+  const onClearAttachment = () => {
+    setAttachment(null);
+    fileInput.current.value = "";
+  };
+
   return (
     <section>
       <form onSubmit={onSubmitHandler}>
@@ -79,9 +89,20 @@ function Home({ userInfo }) {
           value={nweet}
           onChange={onChangeHandler}
         />
-        <input type="file" accept="image/*" onChange={onFileChange} />
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+        />
         <br />
         <button type="submit">Nweet</button>
+        {attachment && (
+          <div>
+            <img src={attachment} width="50px" />
+            <button onClick={onClearAttachment}>Clear</button>
+          </div>
+        )}
       </form>
       <div>
         {nweets.map((nweet) => (
