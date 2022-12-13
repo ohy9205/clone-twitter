@@ -6,42 +6,23 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import { ref, uploadString } from "firebase/storage";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 import { dbService, storageService } from "../firebase";
 import Nweet from "../components/Nweet";
 
 function Home({ userInfo }) {
-  const [nweet, setNweet] = useState("");
+  const [nweetText, setNweetText] = useState("");
   const [nweets, setNweets] = useState([]);
-  const [attachment, setAttachment] = useState();
+  const [attachment, setAttachment] = useState(""); // data:image/형식의 file string
   const fileInput = useRef();
-
   const nweetsCollection = collection(dbService, "nweets");
-
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-
-    // 파일에 접근하는 레퍼런스 생성
-    // 업로드 유저를 구분하기 위해 userInfo.uid 이름의 폴더를 생성한다
-    const storageRef = ref(storageService, `${userInfo.uid}/${uuidv4()}`);
-    // 파일 업로드
-    const response = await uploadString(storageRef, attachment, "data_url");
-    console.log(response);
-
-    // await addDoc(nweetsCollection, {
-    //   text: nweet,
-    //   createdAt: Date.now(),
-    //   authorId: userInfo.uid,
-    // });
-    // setNweet("");
-  };
 
   const onChangeHandler = (e) => {
     const {
       target: { value },
     } = e;
-    setNweet(value);
+    setNweetText(value);
   };
 
   //첨부파일 처리
@@ -65,12 +46,45 @@ function Home({ userInfo }) {
     reader.readAsDataURL(theFile);
   };
 
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    let attachmentUrl;
+    if (attachment) {
+      // 파일에 접근하는 레퍼런스 생성
+      // 업로드 유저를 구분하기 위해 userInfo.uid 이름의 폴더를 생성한다
+      const attachmentRef = ref(storageService, `${userInfo.uid}/${uuidv4()}`);
+      // 파일 업로드
+      const response = await uploadString(
+        attachmentRef,
+        attachment,
+        "data_url"
+      );
+      // 다운로드 위한 파일 URL 생성
+      attachmentUrl = await getDownloadURL(ref(storageService, attachmentRef));
+    }
+
+    //저장할 nweet객체 생성
+    const nweet = {
+      text: nweetText,
+      createdAt: Date.now(),
+      authorId: userInfo.uid,
+      attachmentUrl: attachment ? attachmentUrl : "",
+    };
+
+    await addDoc(nweetsCollection, nweet);
+    setNweetText("");
+    setAttachment("");
+    onClearAttachment();
+  };
+
+  const onClearAttachment = () => {
+    setAttachment(null);
+    fileInput.current.value = "";
+  };
+
   //컴포넌트가 마운트되면 db에 저장된 nweets들을 불러온다
   useEffect(() => {
-    //기존에 getDocs로 구현한건 새로고침을 해야 다시 DB에 있는 정보를 가져와서 업데이트하는 방식
-    //하지만 FireStore Database는 Realtime Database이기 때문에
-    //해당 이점을 살리기 위해 리얼 타임을 구현
-
     // nweets를 최신순으로 정렬하는 쿼리
     const orderQuery = query(nweetsCollection, orderBy("createdAt", "desc"));
     // 리얼타임 db 구독
@@ -83,11 +97,6 @@ function Home({ userInfo }) {
     });
   }, []);
 
-  const onClearAttachment = () => {
-    setAttachment(null);
-    fileInput.current.value = "";
-  };
-
   return (
     <section>
       <form onSubmit={onSubmitHandler}>
@@ -95,7 +104,7 @@ function Home({ userInfo }) {
           type="text"
           placeholder="What's on your mind?"
           maxLength={100}
-          value={nweet}
+          value={nweetText}
           onChange={onChangeHandler}
         />
         <input
