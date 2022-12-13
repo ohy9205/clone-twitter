@@ -51,9 +51,20 @@ function Nweet({ nweetObj, isOwner }) {
     </div>
   );
 
+  const showBasic = (
+    <div>
+      <p>{nweetObj.text}</p>
+      {nweetObj.attachmentUrl && (
+        <div>
+          <img src={nweetObj.attachmentUrl} alt="업로드이미지" width="200px" />
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <>
-      {isEditing ? showEditing : <p>{nweetObj.text}</p>}
+      {isEditing ? showEditing : showBasic}
 
       {isOwner && (
         <div>
