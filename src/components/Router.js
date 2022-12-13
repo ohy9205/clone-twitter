@@ -17,7 +17,7 @@ function AppRouter({ isLoggedIn, userInfo }) {
         {isLoggedIn && <Navigation />}
         <Routes>
           {isLoggedIn ? showHome : loginPage}
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile userInfo={userInfo} />} />
         </Routes>
       </BrowserRouter>
     </>
