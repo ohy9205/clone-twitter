@@ -33,6 +33,24 @@ function Home({ userInfo }) {
     setNweet(value);
   };
 
+  //첨부파일 처리
+  const onFileChange = (e) => {
+    const {
+      target: { files },
+    } = e;
+
+    // 파일 정보를 가져온다
+    const theFile = files[0]; //한개의 파일만 첨부하므로 항상 files[0]
+
+    // 파일 정보를 읽는다
+    const reader = new FileReader();
+    // 파일이 읽기가 끝났을 때 실행
+    reader.onloadend = (finishedEvent) => {
+      console.log(finishedEvent);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
   //컴포넌트가 마운트되면 db에 저장된 nweets들을 불러온다
   useEffect(() => {
     //기존에 getDocs로 구현한건 새로고침을 해야 다시 DB에 있는 정보를 가져와서 업데이트하는 방식
@@ -61,6 +79,8 @@ function Home({ userInfo }) {
           value={nweet}
           onChange={onChangeHandler}
         />
+        <input type="file" accept="image/*" onChange={onFileChange} />
+        <br />
         <button type="submit">Nweet</button>
       </form>
       <div>
