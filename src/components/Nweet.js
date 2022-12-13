@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { dbService } from "../firebase";
+import { dbService, storageService } from "../firebase";
+import { ref, deleteObject } from "firebase/storage";
 
 function Nweet({ nweetObj, isOwner }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,7 +11,11 @@ function Nweet({ nweetObj, isOwner }) {
   const onDeleteHandler = async () => {
     const ok = window.confirm("삭제하시겠습니까?");
     if (ok) {
+      const desertRef = ref(storageService, nweetObj.attachmentUrl);
       await deleteDoc(doc(dbService, "nweets", nweetObj.id));
+      if (nweetObj.attachmentUrl) {
+        await deleteObject(desertRef);
+      }
     }
   };
 
