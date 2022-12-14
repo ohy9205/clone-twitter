@@ -47,11 +47,7 @@ function NweetFactory({ userInfo }) {
       // 업로드 유저를 구분하기 위해 userInfo.uid 이름의 폴더를 생성한다
       const attachmentRef = ref(storageService, `${userInfo.uid}/${uuidv4()}`);
       // 파일 업로드
-      const response = await uploadString(
-        attachmentRef,
-        attachment,
-        "data_url"
-      );
+      await uploadString(attachmentRef, attachment, "data_url");
       // 다운로드 위한 파일 URL 생성
       attachmentUrl = await getDownloadURL(ref(storageService, attachmentRef));
     }
