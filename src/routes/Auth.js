@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { authService } from "../firebase";
 import {
   signInWithPopup,
@@ -21,7 +21,7 @@ function Auth() {
     } else if (name === "GitHub") {
       provider = new GithubAuthProvider();
     }
-    const data = await signInWithPopup(authService, provider);
+    await signInWithPopup(authService, provider);
   };
 
   return (

@@ -33,18 +33,10 @@ function AuthForm() {
     try {
       if (newAccount) {
         //create account - API가 promise를 반환하므로 await필요
-        const data = await createUserWithEmailAndPassword(
-          authService,
-          email,
-          password
-        );
+        await createUserWithEmailAndPassword(authService, email, password);
       } else {
         //login
-        const data = await signInWithEmailAndPassword(
-          authService,
-          email,
-          password
-        );
+        await signInWithEmailAndPassword(authService, email, password);
       }
     } catch (error) {
       setError(error.message);
