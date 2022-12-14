@@ -12,18 +12,16 @@ function AppRouter({ isLoggedIn, userInfo, refreshUser }) {
   const loginPage = <Route path="/" exact element={<Auth />} />;
 
   return (
-    <>
-      <BrowserRouter>
-        {isLoggedIn && <Navigation userInfo={userInfo} />}
-        <Routes>
-          {isLoggedIn ? showHome : loginPage}
-          <Route
-            path="/profile"
-            element={<Profile userInfo={userInfo} refreshUser={refreshUser} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      {isLoggedIn && <Navigation userInfo={userInfo} />}
+      <Routes>
+        {isLoggedIn ? showHome : loginPage}
+        <Route
+          path="/profile"
+          element={<Profile userInfo={userInfo} refreshUser={refreshUser} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

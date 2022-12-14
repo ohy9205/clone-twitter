@@ -24,7 +24,6 @@ function Profile({ userInfo, refreshUser }) {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     if (userInfo.displayName === newDisplayName) return;
-    // console.log(userInfo.updateProfile);
     await updateProfile(authService.currentUser, {
       displayName: newDisplayName,
     });

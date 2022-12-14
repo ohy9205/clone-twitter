@@ -22,11 +22,11 @@ function App() {
     onAuthStateChanged(authService, (user) => {
       if (user) {
         setIsLoggedIn(true);
-        setUserInfo(user);
-        // setUserInfo({
-        //   displayName: user.displayName,
-        //   uid: user.uid,
-        // });
+        // user데이터는 엄청 크기때문에 필요한 정보만 userInfo에 저장
+        setUserInfo({
+          displayName: user.displayName,
+          uid: user.uid,
+        });
       } else {
         setIsLoggedIn(false);
       }
@@ -36,14 +36,12 @@ function App() {
 
   // 유저 정보를 새로고침한다
   const refreshUser = () => {
-    console.log(authService.currentUser);
     const user = authService.currentUser;
     // 필요한 데이터만 userInfo에 저장한다
     setUserInfo({
       displayName: user.displayName,
       uid: user.uid,
     });
-    // setUserInfo(Object.assign({}, user));
   };
 
   return (
