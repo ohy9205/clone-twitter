@@ -38,7 +38,7 @@ function Profile({ userInfo, refreshUser }) {
           <input
             type="text"
             placeholder="Display name"
-            value={newDisplayName}
+            value={newDisplayName ? newDisplayName : ""}
             onChange={onChangeDisplayNameHandler}
           />
           <button type="submit" onClick={onSubmitHandler}>

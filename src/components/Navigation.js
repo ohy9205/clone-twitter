@@ -9,7 +9,7 @@ function Navigation({ userInfo }) {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/profile">{userInfo.displayName}의 프로필</Link>
+          <Link to="/profile">{userInfo.displayName} 프로필</Link>
         </li>
       </ul>
     </nav>
