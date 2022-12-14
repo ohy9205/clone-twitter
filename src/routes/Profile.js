@@ -1,14 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  where,
-  onSnapshot,
-  query,
-  orderBy,
-} from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import { authService, dbService } from "../firebase";
+import { authService } from "../firebase";
 
 function Profile({ userInfo, refreshUser }) {
   const navigate = useNavigate();
